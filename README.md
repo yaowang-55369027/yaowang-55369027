@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>科学小达人 - 五年级科学闯关答题</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
     <style>
         * {
             margin: 0;
@@ -26,6 +24,33 @@
             overflow-x: hidden;
         }
         
+        /* GitHub DOCTYPE 修复 */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            padding: 20px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        
+        body.show-doctype-warning::before {
+            content: "检测到页面渲染问题，正在修复...";
+            opacity: 1;
+        }
+        
         /* 欢迎界面 */
         .welcome-screen {
             position: fixed;
@@ -33,8 +58,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80') no-repeat center center;
-            background-size: cover;
+            background: #1a2980;
+            background: linear-gradient(135deg, #1a2980, #26d0ce);
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -58,7 +83,6 @@
             font-size: 3.5rem;
             color: #fff;
             margin-bottom: 20px;
-            font-family: 'Ma Shan Zheng', cursive;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
         }
         
@@ -124,9 +148,7 @@
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
             width: 100%;
             max-width: 900px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s 0.3s forwards;
+            display: none;
         }
         
         .header h1 {
@@ -150,16 +172,7 @@
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
             overflow: hidden;
             margin-bottom: 30px;
-            opacity: 0;
-            transform: translateY(20px);
-            animation: fadeInUp 0.8s 0.5s forwards;
-        }
-        
-        @keyframes fadeInUp {
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            display: none;
         }
         
         .game-tabs {
@@ -613,6 +626,7 @@
             background: #3a9bf7;
         }
         
+        /* 响应式设计 */
         @media (max-width: 768px) {
             .welcome-title {
                 font-size: 2.5rem;
@@ -647,6 +661,33 @@
             .ai-icon {
                 width: 60px;
                 height: 60px;
+            }
+            
+            .start-btn {
+                font-size: 1.5rem;
+                padding: 15px 30px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .welcome-title {
+                font-size: 2rem;
+            }
+            
+            .welcome-subtitle {
+                font-size: 1.2rem;
+            }
+            
+            .game-instructions {
+                padding: 15px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+            }
+            
+            .ai-chatbox {
+                width: 280px;
             }
         }
     </style>
@@ -849,7 +890,51 @@
         </div>
     </div>
 
+    <!-- 字体图标备用方案 -->
+    <div style="display:none;">
+        <i class="fas fa-flask"></i>
+        <i class="fas fa-play"></i>
+        <i class="fas fa-gamepad"></i>
+        <i class="fas fa-lightbulb"></i>
+        <i class="fas fa-book"></i>
+        <i class="fas fa-robot"></i>
+        <i class="fas fa-trophy"></i>
+        <i class="fas fa-smile-beam"></i>
+        <i class="fas fa-book-open"></i>
+        <i class="fas fa-arrow-right"></i>
+        <i class="fas fa-redo"></i>
+        <i class="fas fa-medal"></i>
+        <i class="fas fa-paper-plane"></i>
+    </div>
+
     <script>
+        // 解决GitHub显示DOCTYPE问题
+        function fixGitHubRendering() {
+            // 检查是否在GitHub环境中
+            if (window.location.hostname.includes('github.io') || 
+                document.documentElement.outerHTML.includes('<!DOCTYPE html>')) {
+                
+                // 显示修复提示
+                document.body.classList.add('show-doctype-warning');
+                
+                // 添加延迟让用户看到提示
+                setTimeout(() => {
+                    // 移除所有不需要的节点
+                    const bodyChildren = document.body.children;
+                    for (let i = bodyChildren.length - 1; i >= 0; i--) {
+                        const node = bodyChildren[i];
+                        if (node.nodeType === Node.COMMENT_NODE || 
+                            (node.nodeType === Node.TEXT_NODE && node.textContent.trim() === '')) {
+                            document.body.removeChild(node);
+                        }
+                    }
+                    
+                    // 隐藏提示
+                    document.body.classList.remove('show-doctype-warning');
+                }, 1500);
+            }
+        }
+        
         // 科学题库（每题3个选项）
         const scienceQuestions = [
             {
@@ -958,6 +1043,8 @@
         const aiMessages = document.getElementById('ai-messages');
         const aiInput = document.getElementById('ai-input');
         const aiSend = document.getElementById('ai-send');
+        const header = document.querySelector('.header');
+        const container = document.querySelector('.container');
 
         // 初始化游戏
         function initGame() {
@@ -976,6 +1063,10 @@
             
             // 切换到答题页面
             showTab('game');
+            
+            // 显示游戏界面
+            header.style.display = 'block';
+            container.style.display = 'flex';
         }
 
         // 开始游戏
@@ -983,11 +1074,8 @@
             welcomeScreen.style.opacity = '0';
             setTimeout(() => {
                 welcomeScreen.style.display = 'none';
-                document.querySelector('.header').style.display = 'block';
-                document.querySelector('.container').style.display = 'flex';
+                initGame();
             }, 800);
-            
-            initGame();
         });
 
         // 加载问题
@@ -1241,7 +1329,7 @@
                 addMessage(message, 'user');
                 aiInput.value = '';
                 
-                // 模拟AI回复（实际应用中应连接后端API）
+                // 模拟AI回复
                 setTimeout(() => {
                     let response = "我还在学习中，暂时不能回答这个问题。你可以尝试问我关于光、力、植物、动物、水循环等科学知识！";
                     
@@ -1270,13 +1358,16 @@
             aiMessages.scrollTop = aiMessages.scrollHeight;
         }
 
-        // 初始化游戏
+        // 初始化页面
         window.onload = () => {
+            // 修复GitHub渲染问题
+            fixGitHubRendering();
+            
             // 添加欢迎动画
-            document.querySelector('.welcome-title').style.animation = 'fadeInUp 1s forwards';
-            document.querySelector('.welcome-subtitle').style.animation = 'fadeInUp 1s 0.3s forwards';
-            document.querySelector('.game-instructions').style.animation = 'fadeInUp 1s 0.6s forwards';
-            document.querySelector('.start-btn').style.animation = 'fadeInUp 1s 0.9s forwards';
+            document.querySelector('.welcome-title').style.animation = 'popIn 1s forwards';
+            document.querySelector('.welcome-subtitle').style.animation = 'popIn 1s 0.3s forwards';
+            document.querySelector('.game-instructions').style.animation = 'popIn 1s 0.6s forwards';
+            document.querySelector('.start-btn').style.animation = 'popIn 1s 0.9s forwards';
         };
     </script>
 </body>
