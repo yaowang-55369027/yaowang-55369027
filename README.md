@@ -747,7 +747,7 @@
                 <div class="instruction-item">
                     <i class="fas fa-gamepad"></i>
                     <div>
-                        <strong>闯关模式：</strong> 游戏包含多个关卡，每个关卡有3道科学题目，答对题目获得积分
+                        <strong>闯关模式：</strong> 每次闯关有10道科学题目，答对一题获得10分
                     </div>
                 </div>
                 <div class="instruction-item">
