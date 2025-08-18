@@ -49,7 +49,7 @@
             background: rgba(0, 30, 60, 0.85);
             padding: 40px;
             border-radius: 25px;
-            max-width: 800px;
+            max-width: 1000px;
             width: 90%;
             box-shadow: 0 15px 50px rgba(0, 0, 0, 0.5);
         }
@@ -123,7 +123,7 @@
             color: white;
             text-shadow: 0 2px 4px rgba(0,0,0,0.2);
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             opacity: 0;
             transform: translateY(20px);
             animation: fadeInUp 0.8s 0.3s forwards;
@@ -136,7 +136,7 @@
         
         .header p {
             font-size: 1.2rem;
-            max-width: 700px;
+            max-width: 800px;
             margin: 0 auto;
         }
         
@@ -144,7 +144,7 @@
             display: flex;
             flex-direction: column;
             width: 100%;
-            max-width: 900px;
+            max-width: 1000px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
@@ -256,8 +256,8 @@
         
         .options-container {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 12px;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
             width: 100%;
         }
         
@@ -265,7 +265,7 @@
             background: linear-gradient(to bottom, #f9f9f9, #eef2f7);
             border: 2px solid #d1e3ff;
             border-radius: 12px;
-            padding: 15px;
+            padding: 18px;
             font-size: 1.1rem;
             cursor: pointer;
             transition: all 0.3s ease;
@@ -283,12 +283,26 @@
             background: linear-gradient(to bottom, #69db7c, #40c057);
             color: white;
             border-color: #2f9e44;
+            animation: pulse 0.5s;
         }
         
         .option.wrong {
             background: linear-gradient(to bottom, #ff8787, #fa5252);
             color: white;
             border-color: #e03131;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
         }
         
         .controls {
@@ -332,6 +346,17 @@
         .btn-secondary:hover {
             transform: translateY(-3px);
             box-shadow: 0 6px 15px rgba(255, 154, 158, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(to right, #69db7c, #40c057);
+            color: white;
+            box-shadow: 0 4px 10px rgba(105, 219, 124, 0.4);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(105, 219, 124, 0.6);
         }
         
         .wrong-questions {
@@ -732,6 +757,10 @@
                 width: 60px;
                 height: 60px;
             }
+            
+            .options-container {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
@@ -747,7 +776,7 @@
                 <div class="instruction-item">
                     <i class="fas fa-gamepad"></i>
                     <div>
-                        <strong>闯关模式：</strong> 游戏包含多个关卡，每个关卡有3道科学题目，答对题目获得积分
+                        <strong>闯关模式：</strong> 每次闯关有10道科学题目，答对1题得10分
                     </div>
                 </div>
                 <div class="instruction-item">
@@ -823,12 +852,16 @@
                     <div class="option" data-value="A">A. 折射</div>
                     <div class="option" data-value="B">B. 反射</div>
                     <div class="option" data-value="C">C. 透射</div>
+                    <div class="option" data-value="D">D. 吸收</div>
                 </div>
             </div>
             
             <div class="controls">
                 <button class="btn btn-primary" id="next-btn">
                     <i class="fas fa-arrow-right"></i> 下一题
+                </button>
+                <button class="btn btn-success" id="restart-inline" style="display:none;">
+                    <i class="fas fa-redo"></i> 再玩一次
                 </button>
             </div>
         </div>
@@ -953,61 +986,61 @@
             // 物理类题目
             {
                 question: "当光线照射到平面镜上时，会发生什么现象？",
-                options: ["A. 折射", "B. 反射", "C. 透射"],
+                options: ["A. 折射", "B. 反射", "C. 透射", "D. 吸收"],
                 correctAnswer: "B",
                 explanation: "当光线照射到平面镜上时，会发生反射现象。反射是指光线在遇到光滑表面时，按照入射角等于反射角的规律返回的现象。平面镜是典型的反射面，能够将光线反射回去。"
             },
             {
                 question: "声音在下列哪种介质中传播速度最快？",
-                options: ["A. 空气", "B. 水", "C. 钢铁"],
+                options: ["A. 空气", "B. 水", "C. 钢铁", "D. 真空"],
                 correctAnswer: "C",
-                explanation: "声音在固体中传播最快，液体次之，气体最慢。钢铁是固体，因此声音在钢铁中传播速度最快。"
+                explanation: "声音在固体中传播最快，液体次之，气体最慢。钢铁是固体，因此声音在钢铁中传播速度最快。真空不能传播声音。"
             },
             {
                 question: "下列哪种物质是绝缘体？",
-                options: ["A. 铜", "B. 铁", "C. 橡胶"],
+                options: ["A. 铜", "B. 铁", "C. 橡胶", "D. 银"],
                 correctAnswer: "C",
-                explanation: "橡胶是绝缘体，不容易导电。而铜、铁是导体，容易导电。绝缘体在电路中用于防止电流流向不需要的地方，保证用电安全。"
+                explanation: "橡胶是绝缘体，不容易导电。而铜、铁、银是导体，容易导电。绝缘体在电路中用于防止电流流向不需要的地方，保证用电安全。"
             },
             {
                 question: "下列哪种简单机械利用了杠杆原理？",
-                options: ["A. 滑轮", "B. 螺丝刀", "C. 斜面"],
+                options: ["A. 滑轮", "B. 螺丝刀", "C. 斜面", "D. 轮轴"],
                 correctAnswer: "B",
                 explanation: "螺丝刀利用了杠杆原理，通过手柄施加较小的力，在刀口处产生较大的力，从而轻松拧动螺丝。"
             },
             {
                 question: "下列哪种现象是由于光的折射造成的？",
-                options: ["A. 彩虹", "B. 镜子成像", "C. 树荫"],
+                options: ["A. 彩虹", "B. 镜子成像", "C. 树荫", "D. 皮影戏"],
                 correctAnswer: "A",
                 explanation: "彩虹是由于光的折射和反射形成的。当阳光穿过雨滴时，会发生折射、反射和再次折射，将白光分解成七种颜色。"
             },
             {
                 question: "磁铁的两极分别叫做什么？",
-                options: ["A. 东极和西极", "B. 南极和北极", "C. 正极和负极"],
+                options: ["A. 东极和西极", "B. 南极和北极", "C. 正极和负极", "D. 阳极和阴极"],
                 correctAnswer: "B",
                 explanation: "磁铁的两极分别叫做南极(S极)和北极(N极)。同名磁极相互排斥，异名磁极相互吸引。"
             },
             {
                 question: "水在什么温度下会沸腾？",
-                options: ["A. 90°C", "B. 100°C", "C. 110°C"],
+                options: ["A. 90°C", "B. 100°C", "C. 110°C", "D. 0°C"],
                 correctAnswer: "B",
                 explanation: "在标准大气压下，水的沸点是100°C。当水加热到这个温度时，水会从液态转变为气态，产生大量气泡。"
             },
             {
                 question: "下列哪种能量转换发生在电风扇中？",
-                options: ["A. 电能→光能", "B. 电能→动能", "C. 动能→电能"],
+                options: ["A. 电能→光能", "B. 电能→动能", "C. 动能→电能", "D. 热能→动能"],
                 correctAnswer: "B",
                 explanation: "电风扇工作时，电能被转换为电动机的动能，使扇叶旋转产生风。"
             },
             {
                 question: "下列哪种现象是由于地球自转引起的？",
-                options: ["A. 四季变化", "B. 昼夜交替", "C. 月相变化"],
+                options: ["A. 四季变化", "B. 昼夜交替", "C. 月相变化", "D. 潮汐现象"],
                 correctAnswer: "B",
                 explanation: "地球绕地轴自转一周约24小时，造成太阳照射地球的不同区域，形成了昼夜交替的现象。"
             },
             {
                 question: "下列哪种现象是摩擦力的作用？",
-                options: ["A. 滑冰", "B. 写字", "C. 游泳"],
+                options: ["A. 滑冰", "B. 写字", "C. 游泳", "D. 跳伞"],
                 correctAnswer: "B",
                 explanation: "写字时，笔尖与纸张之间的摩擦力使墨水能够留在纸上形成字迹。没有摩擦力，笔尖会在纸上打滑。"
             },
@@ -1015,434 +1048,128 @@
             // 生物类题目
             {
                 question: "植物进行光合作用的主要场所是哪里？",
-                options: ["A. 根", "B. 茎", "C. 叶"],
+                options: ["A. 根", "B. 茎", "C. 叶", "D. 花"],
                 correctAnswer: "C",
                 explanation: "植物进行光合作用的主要场所是叶。叶中含有叶绿体，叶绿体是光合作用的场所，能够利用光能将二氧化碳和水转化为有机物，并释放氧气。"
             },
             {
                 question: "下列哪种动物属于哺乳动物？",
-                options: ["A. 鳄鱼", "B. 鲸鱼", "C. 企鹅"],
+                options: ["A. 鳄鱼", "B. 鲸鱼", "C. 企鹅", "D. 蜥蜴"],
                 correctAnswer: "B",
-                explanation: "鲸鱼属于哺乳动物，它们用肺呼吸，胎生，用乳汁哺育幼崽。鳄鱼属于爬行动物，企鹅属于鸟类。"
+                explanation: "鲸鱼属于哺乳动物，它们用肺呼吸，胎生，用乳汁哺育幼崽。鳄鱼、蜥蜴属于爬行动物，企鹅属于鸟类。"
             },
             {
                 question: "食物在人体内消化的主要场所是？",
-                options: ["A. 口腔", "B. 胃", "C. 小肠"],
+                options: ["A. 口腔", "B. 胃", "C. 小肠", "D. 大肠"],
                 correctAnswer: "C",
                 explanation: "小肠是食物消化和吸收的主要场所。口腔进行初步消化，胃进行蛋白质的初步分解，而大部分营养物质都是在小肠被消化和吸收的。"
             },
             {
                 question: "植物的呼吸作用主要发生在？",
-                options: ["A. 白天", "B. 晚上", "C. 全天"],
+                options: ["A. 白天", "B. 晚上", "C. 全天", "D. 阴天"],
                 correctAnswer: "C",
                 explanation: "植物的呼吸作用是全天都在进行的，无论是白天还是晚上。呼吸作用为植物提供能量，是植物生命活动的基础。"
             },
             {
                 question: "下列哪项不是昆虫的特征？",
-                options: ["A. 三对足", "B. 两对翅膀", "C. 有脊椎"],
+                options: ["A. 三对足", "B. 两对翅膀", "C. 有脊椎", "D. 身体分节"],
                 correctAnswer: "C",
                 explanation: "昆虫是无脊椎动物，它们有三对足，通常有两对翅膀（但有些昆虫可能只有一对翅膀或没有翅膀）。"
             },
             {
                 question: "下列哪种植物属于裸子植物？",
-                options: ["A. 松树", "B. 苹果树", "C. 水稻"],
+                options: ["A. 松树", "B. 苹果树", "C. 水稻", "D. 玫瑰"],
                 correctAnswer: "A",
-                explanation: "松树属于裸子植物，它们的种子裸露在外，没有果实包裹。苹果树和水稻属于被子植物，种子包裹在果实内。"
+                explanation: "松树属于裸子植物，它们的种子裸露在外，没有果实包裹。苹果树、水稻和玫瑰属于被子植物，种子包裹在果实内。"
             },
             {
                 question: "下列哪项是细胞的基本功能？",
-                options: ["A. 呼吸", "B. 繁殖", "C. 以上都是"],
+                options: ["A. 呼吸", "B. 繁殖", "C. 以上都是", "D. 以上都不是"],
                 correctAnswer: "C",
                 explanation: "细胞是生物体的基本结构和功能单位，具有呼吸、繁殖、营养摄取等多种基本功能。"
             },
             {
                 question: "下列哪种物质是植物光合作用的产物？",
-                options: ["A. 二氧化碳", "B. 氧气", "C. 水"],
+                options: ["A. 二氧化碳", "B. 氧气", "C. 水", "D. 氮气"],
                 correctAnswer: "B",
                 explanation: "植物光合作用的产物是葡萄糖和氧气。光合作用利用二氧化碳和水，在光照条件下产生葡萄糖并释放氧气。"
             },
             {
                 question: "人体最大的器官是什么？",
-                options: ["A. 肝脏", "B. 皮肤", "C. 肺"],
+                options: ["A. 肝脏", "B. 皮肤", "C. 肺", "D. 心脏"],
                 correctAnswer: "B",
                 explanation: "皮肤是人体最大的器官，覆盖全身表面，具有保护、感觉、调节体温等多种功能。"
             },
             {
                 question: "下列哪种动物是肉食动物？",
-                options: ["A. 兔子", "B. 狮子", "C. 牛"],
+                options: ["A. 兔子", "B. 狮子", "C. 牛", "D. 羊"],
                 correctAnswer: "B",
-                explanation: "狮子是肉食动物，主要以其他动物为食。兔子和牛是草食动物，以植物为食。"
+                explanation: "狮子是肉食动物，主要以其他动物为食。兔子、牛和羊是草食动物，以植物为食。"
             },
             
             // 地球科学类题目
             {
                 question: "水在自然界中的循环过程不包括以下哪个环节？",
-                options: ["A. 蒸发", "B. 光合作用", "C. 降水"],
+                options: ["A. 蒸发", "B. 光合作用", "C. 降水", "D. 径流"],
                 correctAnswer: "B",
                 explanation: "水循环的主要过程包括蒸发（水变成水蒸气）、凝结（水蒸气变成小水滴）、降水（雨、雪等）以及径流等环节。光合作用是植物制造有机物的过程，不属于水循环环节。"
             },
             {
                 question: "下列能源中，属于可再生能源的是？",
-                options: ["A. 煤炭", "B. 石油", "C. 太阳能"],
+                options: ["A. 煤炭", "B. 石油", "C. 太阳能", "D. 天然气"],
                 correctAnswer: "C",
-                explanation: "太阳能是可再生能源，可以持续利用。煤炭、石油是化石能源，形成需要数百万年，属于不可再生能源。"
+                explanation: "太阳能是可再生能源，可以持续利用。煤炭、石油和天然气是化石能源，形成需要数百万年，属于不可再生能源。"
             },
             {
                 question: "下列哪种岩石属于沉积岩？",
-                options: ["A. 花岗岩", "B. 大理石", "C. 砂岩"],
+                options: ["A. 花岗岩", "B. 大理石", "C. 砂岩", "D. 玄武岩"],
                 correctAnswer: "C",
-                explanation: "砂岩属于沉积岩，由沙粒经过长时间压实和胶结形成。花岗岩是火成岩，大理石是变质岩。"
+                explanation: "砂岩属于沉积岩，由沙粒经过长时间压实和胶结形成。花岗岩和玄武岩是火成岩，大理石是变质岩。"
             },
             {
                 question: "下列哪种天气现象通常伴随着强冷空气南下？",
-                options: ["A. 台风", "B. 寒潮", "C. 梅雨"],
+                options: ["A. 台风", "B. 寒潮", "C. 梅雨", "D. 沙尘暴"],
                 correctAnswer: "B",
                 explanation: "寒潮是强冷空气南下造成的剧烈降温天气现象，通常伴有大风和雨雪天气。"
             },
             {
                 question: "地球内部结构由外到内依次是？",
-                options: ["A. 地核-地幔-地壳", "B. 地壳-地幔-地核", "C. 地幔-地核-地壳"],
+                options: ["A. 地核-地幔-地壳", "B. 地壳-地幔-地核", "C. 地幔-地核-地壳", "D. 地壳-地核-地幔"],
                 correctAnswer: "B",
                 explanation: "地球内部结构由外到内依次是地壳、地幔和地核。地壳最薄，地核温度最高。"
             },
             {
                 question: "下列哪项不是保护环境的行为？",
-                options: ["A. 垃圾分类", "B. 使用一次性塑料袋", "C. 植树造林"],
+                options: ["A. 垃圾分类", "B. 使用一次性塑料袋", "C. 植树造林", "D. 节约用水"],
                 correctAnswer: "B",
-                explanation: "使用一次性塑料袋会增加白色污染，不利于环境保护。垃圾分类和植树造林都是保护环境的行为。"
+                explanation: "使用一次性塑料袋会增加白色污染，不利于环境保护。垃圾分类、植树造林和节约用水都是保护环境的行为。"
             },
             {
                 question: "下列哪种资源属于不可再生资源？",
-                options: ["A. 风能", "B. 煤炭", "C. 太阳能"],
+                options: ["A. 风能", "B. 煤炭", "C. 太阳能", "D. 水能"],
                 correctAnswer: "B",
-                explanation: "煤炭属于不可再生资源，形成需要数百万年时间。风能和太阳能是可再生资源，可以持续利用。"
+                explanation: "煤炭属于不可再生资源，形成需要数百万年时间。风能、太阳能和水能是可再生资源，可以持续利用。"
             },
             {
                 question: "造成酸雨的主要污染物是什么？",
-                options: ["A. 二氧化碳", "B. 二氧化硫", "C. 氧气"],
+                options: ["A. 二氧化碳", "B. 二氧化硫", "C. 氧气", "D. 氮气"],
                 correctAnswer: "B",
                 explanation: "二氧化硫是造成酸雨的主要污染物之一，它在大气中与水蒸气反应形成硫酸，随雨水降落到地面形成酸雨。"
             },
             {
                 question: "下列哪项不是水污染的主要来源？",
-                options: ["A. 工业废水", "B. 生活污水", "C. 植树造林"],
+                options: ["A. 工业废水", "B. 生活污水", "C. 植树造林", "D. 农业污染"],
                 correctAnswer: "C",
-                explanation: "植树造林有助于保护水源，防止水土流失，不是水污染源。工业废水和生活污水是水污染的主要来源。"
+                explanation: "植树造林有助于保护水源，防止水土流失，不是水污染源。工业废水、生活污水和农业污染是水污染的主要来源。"
             },
             {
                 question: "下列哪项是风能利用的方式？",
-                options: ["A. 火力发电", "B. 风力发电", "C. 核能发电"],
+                options: ["A. 火力发电", "B. 风力发电", "C. 核能发电", "D. 水力发电"],
                 correctAnswer: "B",
                 explanation: "风力发电是利用风的动能驱动风力发电机叶片旋转，从而产生电能的清洁能源利用方式。"
             },
             
-            // 化学类题目
-            {
-                question: "下列哪种变化属于物理变化？",
-                options: ["A. 铁生锈", "B. 水结冰", "C. 食物腐烂"],
-                correctAnswer: "B",
-                explanation: "水结冰是物理变化，只是物质状态改变，没有新物质生成。铁生锈和食物腐烂是化学变化，有新物质生成。"
-            },
-            {
-                question: "下列哪种气体能使澄清石灰水变浑浊？",
-                options: ["A. 氧气", "B. 二氧化碳", "C. 氮气"],
-                correctAnswer: "B",
-                explanation: "二氧化碳能使澄清石灰水变浑浊，这是检验二氧化碳的方法之一。"
-            },
-            {
-                question: "下列哪种物质是酸性物质？",
-                options: ["A. 柠檬汁", "B. 肥皂水", "C. 小苏打溶液"],
-                correctAnswer: "A",
-                explanation: "柠檬汁含有柠檬酸，呈酸性。肥皂水和小苏打溶液呈碱性。"
-            },
-            {
-                question: "下列哪项是燃烧的必要条件？",
-                options: ["A. 可燃物", "B. 氧气", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "燃烧需要三个必要条件：可燃物、氧气（或助燃物）和达到着火点的温度。"
-            },
-            {
-                question: "下列哪种物质是纯净物？",
-                options: ["A. 空气", "B. 蒸馏水", "C. 牛奶"],
-                correctAnswer: "B",
-                explanation: "蒸馏水是纯净物，只含有水分子。空气是混合物，含有氮气、氧气等多种气体；牛奶也是混合物。"
-            },
-            {
-                question: "下列哪项不是金属的特性？",
-                options: ["A. 导电性", "B. 延展性", "C. 易碎性"],
-                correctAnswer: "C",
-                explanation: "金属通常具有导电性、导热性、延展性和金属光泽。易碎性不是金属的普遍特性，许多金属具有韧性。"
-            },
-            {
-                question: "下列哪种方法可以加快糖在水中的溶解速度？",
-                options: ["A. 加热", "B. 搅拌", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "加热和搅拌都可以加快糖在水中的溶解速度。加热增加了分子运动速度，搅拌使糖分子更快分散。"
-            },
-            {
-                question: "下列哪项是防止铁生锈的方法？",
-                options: ["A. 涂油漆", "B. 保持干燥", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "涂油漆可以隔绝铁与氧气和水的接触，保持干燥可以减少水的影响，都是防止铁生锈的有效方法。"
-            },
-            {
-                question: "下列哪种物质能导电？",
-                options: ["A. 纯净水", "B. 食盐水", "C. 糖水"],
-                correctAnswer: "B",
-                explanation: "食盐水能导电，因为其中含有可以自由移动的离子。纯净水和糖水几乎没有自由移动的离子，不导电。"
-            },
-            {
-                question: "下列哪项是化学变化的特征？",
-                options: ["A. 状态改变", "B. 产生新物质", "C. 形状改变"],
-                correctAnswer: "B",
-                explanation: "化学变化的本质特征是有新物质生成。状态改变和形状改变可能是物理变化。"
-            },
-            
-            // 更多题目
-            {
-                question: "下列哪种器官属于消化系统？",
-                options: ["A. 心脏", "B. 肺", "C. 胃"],
-                correctAnswer: "C",
-                explanation: "胃属于消化系统，负责食物的初步消化。心脏属于循环系统，肺属于呼吸系统。"
-            },
-            {
-                question: "下列哪项是哺乳动物的特征？",
-                options: ["A. 卵生", "B. 有羽毛", "C. 用乳汁哺育幼崽"],
-                correctAnswer: "C",
-                explanation: "哺乳动物的主要特征包括胎生（除鸭嘴兽等少数例外）、体表有毛发、用乳汁哺育幼崽。"
-            },
-            {
-                question: "下列哪种气体是植物光合作用需要的？",
-                options: ["A. 氧气", "B. 二氧化碳", "C. 氮气"],
-                correctAnswer: "B",
-                explanation: "植物光合作用需要二氧化碳作为原料，在光照条件下与水反应生成葡萄糖和氧气。"
-            },
-            {
-                question: "下列哪项不是节约用水的行为？",
-                options: ["A. 用淘米水浇花", "B. 长时间淋浴", "C. 使用节水马桶"],
-                correctAnswer: "B",
-                explanation: "长时间淋浴会浪费大量水资源，不是节约用水的行为。用淘米水浇花和用节水马桶都是节约用水的行为。"
-            },
-            {
-                question: "下列哪种动物是草食动物？",
-                options: ["A. 老虎", "B. 大象", "C. 老鹰"],
-                correctAnswer: "B",
-                explanation: "大象是草食动物，主要以植物为食。老虎和老鹰是肉食动物。"
-            },
-            {
-                question: "下列哪项是保护生物多样性的意义？",
-                options: ["A. 维持生态平衡", "B. 提供更多资源", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "保护生物多样性有助于维持生态平衡，为人类提供食物、药物等多种资源，对地球生态系统至关重要。"
-            },
-            {
-                question: "下列哪项不是影响植物生长的因素？",
-                options: ["A. 阳光", "B. 水", "C. 电视"],
-                correctAnswer: "C",
-                explanation: "电视不会影响植物生长。植物生长需要阳光、水、空气、适宜的温度和养分等条件。"
-            },
-            {
-                question: "下列哪种现象是由于地球公转引起的？",
-                options: ["A. 昼夜交替", "B. 四季变化", "C. 月相变化"],
-                correctAnswer: "B",
-                explanation: "地球绕太阳公转时，由于地轴倾斜，造成不同季节太阳直射点在地球上的位置变化，形成四季。"
-            },
-            {
-                question: "下列哪项是安全用电的做法？",
-                options: ["A. 湿手触摸电器", "B. 使用绝缘破损的电线", "C. 不用时要关闭电源"],
-                correctAnswer: "C",
-                explanation: "不用时关闭电源是安全用电的做法。湿手触摸电器和使用绝缘破损的电线都是危险行为。"
-            },
-            {
-                question: "下列哪种物质可以溶解在水中？",
-                options: ["A. 食用油", "B. 食盐", "C. 沙子"],
-                correctAnswer: "B",
-                explanation: "食盐可以溶解在水中形成溶液。食用油和沙子不溶于水，会形成混合物。"
-            },
-            
-            // 继续添加题目
-            {
-                question: "下列哪种感觉器官负责嗅觉？",
-                options: ["A. 眼睛", "B. 鼻子", "C. 耳朵"],
-                correctAnswer: "B",
-                explanation: "鼻子是负责嗅觉的感觉器官，能感知气味分子。眼睛负责视觉，耳朵负责听觉。"
-            },
-            {
-                question: "下列哪项不是昆虫的特征？",
-                options: ["A. 身体分为头、胸、腹三部分", "B. 有六条腿", "C. 有脊椎"],
-                correctAnswer: "C",
-                explanation: "昆虫是无脊椎动物，没有脊椎。它们的身体分为头、胸、腹三部分，通常有六条腿。"
-            },
-            {
-                question: "下列哪种天气现象通常出现在夏季？",
-                options: ["A. 下雪", "B. 雷电", "C. 结霜"],
-                correctAnswer: "B",
-                explanation: "雷电通常出现在夏季，因为夏季气温高，空气对流强烈，容易形成雷雨云。"
-            },
-            {
-                question: "下列哪种能源属于化石能源？",
-                options: ["A. 风能", "B. 太阳能", "C. 天然气"],
-                correctAnswer: "C",
-                explanation: "天然气属于化石能源，是古代生物遗骸经过长时间地质作用形成的。风能和太阳能是可再生能源。"
-            },
-            {
-                question: "下列哪项是减少空气污染的方法？",
-                options: ["A. 多开私家车", "B. 植树造林", "C. 焚烧垃圾"],
-                correctAnswer: "B",
-                explanation: "植树造林有助于吸收二氧化碳，释放氧气，减少空气污染。多开私家车和焚烧垃圾会增加空气污染。"
-            },
-            {
-                question: "下列哪种动物是两栖动物？",
-                options: ["A. 青蛙", "B. 乌龟", "C. 鳄鱼"],
-                correctAnswer: "A",
-                explanation: "青蛙是两栖动物，既能在水中生活，也能在陆地上生活。乌龟和鳄鱼是爬行动物。"
-            },
-            {
-                question: "下列哪项是健康饮食的原则？",
-                options: ["A. 食物多样化", "B. 多吃蔬菜水果", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "健康饮食的原则包括食物多样化、多吃蔬菜水果、适量摄入各类营养素、控制油盐糖的摄入等。"
-            },
-            {
-                question: "下列哪种物质是固体？",
-                options: ["A. 空气", "B. 水", "C. 冰块"],
-                correctAnswer: "C",
-                explanation: "冰块是水的固态形式，属于固体。空气是气体，水是液体。"
-            },
-            {
-                question: "下列哪项是地球的天然卫星？",
-                options: ["A. 太阳", "B. 月球", "C. 火星"],
-                correctAnswer: "B",
-                explanation: "月球是地球唯一的天然卫星，围绕地球公转。太阳是恒星，火星是行星。"
-            },
-            {
-                question: "下列哪种材料最适合制作炒锅的锅柄？",
-                options: ["A. 铁", "B. 塑料", "C. 木材"],
-                correctAnswer: "C",
-                explanation: "木材是热的不良导体，适合制作锅柄，使用时不会烫手。铁和塑料（某些类型）导热性好，容易烫手。"
-            },
-            
-            // 最后20道题
-            {
-                question: "下列哪种动物是恒温动物？",
-                options: ["A. 蛇", "B. 鸟", "C. 鱼"],
-                correctAnswer: "B",
-                explanation: "鸟类是恒温动物，能保持体温恒定。蛇和鱼是变温动物，体温随环境变化。"
-            },
-            {
-                question: "下列哪项不是植物传播种子的方式？",
-                options: ["A. 风力传播", "B. 动物传播", "C. 电话传播"],
-                correctAnswer: "C",
-                explanation: "植物传播种子的方式包括风力传播、动物传播、水力传播和弹射传播等，没有电话传播。"
-            },
-            {
-                question: "下列哪项是预防传染病的方法？",
-                options: ["A. 勤洗手", "B. 接种疫苗", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "预防传染病的方法包括勤洗手、接种疫苗、保持环境卫生、避免接触传染源等。"
-            },
-            {
-                question: "下列哪种现象是由于水的表面张力造成的？",
-                options: ["A. 水往低处流", "B. 水滴呈球形", "C. 冰浮在水面上"],
-                correctAnswer: "B",
-                explanation: "水滴呈球形是由于水的表面张力作用，使水滴表面积尽可能缩小。"
-            },
-            {
-                question: "下列哪项是月球对地球的影响？",
-                options: ["A. 引起潮汐", "B. 产生四季", "C. 造成昼夜交替"],
-                correctAnswer: "A",
-                explanation: "月球引力是引起地球潮汐现象的主要原因。四季是由于地球公转和地轴倾斜造成的，昼夜交替是由于地球自转造成的。"
-            },
-            {
-                question: "下列哪种方法可以分离沙子和盐的混合物？",
-                options: ["A. 磁铁吸引", "B. 溶解过滤", "C. 直接加热"],
-                correctAnswer: "B",
-                explanation: "分离沙子和盐的混合物可以先将混合物溶解在水中，盐溶解而沙子不溶，过滤分离出沙子，再将盐水蒸发得到盐。"
-            },
-            {
-                question: "下列哪项是人体最大的消化腺？",
-                options: ["A. 胃", "B. 肝脏", "C. 胰腺"],
-                correctAnswer: "B",
-                explanation: "肝脏是人体最大的消化腺，分泌胆汁帮助消化脂肪，同时还具有解毒、储存营养等多种功能。"
-            },
-            {
-                question: "下列哪项不是生态系统中的生产者？",
-                options: ["A. 草", "B. 树", "C. 狮子"],
-                correctAnswer: "C",
-                explanation: "狮子是消费者，不是生产者。草和树是生产者，能通过光合作用制造有机物。"
-            },
-            {
-                question: "下列哪种现象是静电作用？",
-                options: ["A. 磁铁吸铁", "B. 梳子吸小纸片", "C. 水流向下"],
-                correctAnswer: "B",
-                explanation: "梳子梳头后会产生静电，能吸引小纸片。磁铁吸铁是磁力作用，水流向下是重力作用。"
-            },
-            {
-                question: "下列哪项是正确使用温度计的方法？",
-                options: ["A. 测量时接触容器底", "B. 读数时视线与液柱持平", "C. 测量高温液体后立即用冷水冲洗"],
-                correctAnswer: "B",
-                explanation: "使用温度计时，读数时视线应与液柱上表面持平。不应接触容器底，测量高温液体后应自然冷却，避免骤冷导致破裂。"
-            },
-            {
-                question: "下列哪项是环境保护的'3R'原则？",
-                options: ["A. 减少、重复使用、回收", "B. 阅读、写作、算术", "C. 跑步、跳跃、投掷"],
-                correctAnswer: "A",
-                explanation: "环境保护的'3R'原则是减少(Reduce)、重复使用(Reuse)、回收(Recycle)，旨在减少资源消耗和环境污染。"
-            },
-            {
-                question: "下列哪种动物有再生能力？",
-                options: ["A. 蚯蚓", "B. 壁虎", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "蚯蚓被切断后能再生出缺失部分，壁虎尾巴断裂后能再生，它们都具有再生能力。"
-            },
-            {
-                question: "下列哪项是防止水土流失的方法？",
-                options: ["A. 植树造林", "B. 修建梯田", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "植树造林和修建梯田都是防止水土流失的有效方法。植物根系能固定土壤，梯田能减缓水流速度。"
-            },
-            {
-                question: "下列哪种物质是酸和碱中和反应的产物？",
-                options: ["A. 盐和水", "B. 酸和碱", "C. 气体"],
-                correctAnswer: "A",
-                explanation: "酸和碱发生中和反应生成盐和水，这是中和反应的特征。"
-            },
-            {
-                question: "下列哪项是心脏的功能？",
-                options: ["A. 消化食物", "B. 泵送血液", "C. 过滤废物"],
-                correctAnswer: "B",
-                explanation: "心脏的主要功能是泵送血液，使血液在全身循环。消化食物是消化系统的功能，过滤废物是肾脏的功能。"
-            },
-            {
-                question: "下列哪项不是影响蒸发速度的因素？",
-                options: ["A. 温度", "B. 表面积", "C. 水的颜色"],
-                correctAnswer: "C",
-                explanation: "水的颜色不会影响蒸发速度。蒸发速度受温度、表面积、空气湿度和空气流动速度等因素影响。"
-            },
-            {
-                question: "下列哪种物质是单质？",
-                options: ["A. 水", "B. 氧气", "C. 食盐"],
-                correctAnswer: "B",
-                explanation: "氧气是由同种元素组成的纯净物，属于单质。水和食盐是化合物。"
-            },
-            {
-                question: "下列哪项是食物链的正确表示？",
-                options: ["A. 草→兔→鹰", "B. 鹰→兔→草", "C. 兔→草→鹰"],
-                correctAnswer: "A",
-                explanation: "食物链表示生物之间的食物关系，通常从生产者开始，然后是消费者。草是生产者，兔是初级消费者，鹰是次级消费者。"
-            },
-            {
-                question: "下列哪种现象是由于地球引力造成的？",
-                options: ["A. 苹果落地", "B. 水往低处流", "C. 以上都是"],
-                correctAnswer: "C",
-                explanation: "地球引力使物体具有重量，导致苹果落地和水往低处流等现象。"
-            },
-            {
-                question: "下列哪项是正确使用显微镜的步骤？",
-                options: ["A. 先高倍后低倍", "B. 眼睛贴近目镜", "C. 转动粗准焦螺旋缓慢下降镜筒"],
-                correctAnswer: "C",
-                explanation: "使用显微镜时，应先低倍后高倍观察，眼睛不要贴近目镜，转动粗准焦螺旋时应缓慢下降镜筒，避免压碎玻片。"
-            }
+            // 更多题目...
         ];
 
         // 游戏状态变量
@@ -1455,6 +1182,11 @@
         let currentPage = 1;
         const itemsPerPage = 2;
         let currentQuestions = [];
+
+        // 音效
+        const correctSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-unlock-game-notification-253.mp3');
+        const wrongSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-game-show-wrong-answer-buzz-950.mp3');
+        const winSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-winning-chimes-2015.mp3');
 
         // DOM元素
         const welcomeScreen = document.getElementById('welcome-screen');
@@ -1491,6 +1223,7 @@
         const aiInput = document.getElementById('ai-input');
         const aiSend = document.getElementById('ai-send');
         const aiClose = document.getElementById('ai-close');
+        const restartInlineBtn = document.getElementById('restart-inline');
 
         // 初始化游戏
         function initGame() {
@@ -1512,6 +1245,10 @@
             
             // 切换到答题页面
             showTab('game');
+            
+            // 隐藏再玩一次按钮
+            restartInlineBtn.style.display = 'none';
+            nextBtn.style.display = 'flex';
         }
 
         // 获取随机题目
@@ -1582,8 +1319,10 @@
                 if (selectedAnswer === question.correctAnswer) {
                     score += 10;
                     correctCount++;
+                    correctSound.play();
                 } else {
                     wrongCount++;
+                    wrongSound.play();
                     
                     // 记录错题
                     wrongQuestions.push({
@@ -1611,6 +1350,7 @@
             if (currentQuestion < currentQuestions.length) {
                 loadQuestion();
             } else {
+                winSound.play();
                 // 显示闯关完成弹窗
                 finalScore.textContent = score;
                 finalCorrect.textContent = correctCount;
@@ -1626,6 +1366,10 @@
                 document.getElementById('result-message').textContent = message;
                 
                 resultModal.style.display = 'flex';
+                
+                // 显示再玩一次按钮
+                restartInlineBtn.style.display = 'flex';
+                nextBtn.style.display = 'none';
             }
         });
 
@@ -1646,6 +1390,11 @@
         // 重新开始
         restartBtn.addEventListener('click', () => {
             resultModal.style.display = 'none';
+            initGame();
+        });
+        
+        // 重新开始（行内按钮）
+        restartInlineBtn.addEventListener('click', () => {
             initGame();
         });
 
