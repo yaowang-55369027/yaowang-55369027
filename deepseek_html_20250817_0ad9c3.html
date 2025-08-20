@@ -527,6 +527,26 @@
             transition: all 0.3s ease;
         }
         
+        /* 新增结果弹窗动画 */
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes countUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result-medal {
+            animation: rotate 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        
+        .result-stat {
+            animation: countUp 0.8s forwards;
+            opacity: 0;
+        }
+        
         /* AI助手 */
         .ai-assistant {
             position: fixed;
@@ -721,39 +741,6 @@
             font-size: 0.8rem;
         }
         
-        /* 结果弹窗动画 */
-        .final-score-item {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .result-message {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        .modal-footer {
-            opacity: 0;
-            transform: translateY(20px);
-        }
-        
-        @keyframes bounceIn {
-            0% { transform: scale(0.8); opacity: 0; }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        
-        @keyframes floatUp {
-            0% { transform: translateY(20px); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
-        }
-        
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
-        }
-        
         @media (max-width: 768px) {
             .welcome-title {
                 font-size: 2.5rem;
@@ -943,30 +930,30 @@
             </div>
             <div class="modal-body">
                 <div style="text-align: center; margin: 20px 0;">
-                    <i class="fas fa-medal" style="font-size: 4rem; color: #ffd166;"></i>
+                    <i class="fas fa-medal result-medal" style="font-size: 4rem; color: #ffd166;"></i>
                 </div>
                 <div style="background: #f0f7ff; border-radius: 15px; padding: 20px; margin: 20px 0;">
                     <p style="text-align: center; margin-bottom: 15px; font-size: 1.2rem;">成绩统计</p>
                     <div style="display: flex; justify-content: space-around; text-align: center;">
-                        <div class="final-score-item">
-                            <div style="font-size: 2rem; color: #4facfe; font-weight: bold;" id="final-score">0</div>
+                        <div>
+                            <div style="font-size: 2rem; color: #4facfe; font-weight: bold;" class="result-stat" id="final-score">0</div>
                             <div>总得分</div>
                         </div>
-                        <div class="final-score-item">
-                            <div style="font-size: 2rem; color: #06d6a0; font-weight: bold;" id="final-correct">0</div>
+                        <div>
+                            <div style="font-size: 2rem; color: #06d6a0; font-weight: bold;" class="result-stat" id="final-correct">0</div>
                             <div>答对题数</div>
                         </div>
-                        <div class="final-score-item">
-                            <div style="font-size: 2rem; color: #ff6b6b; font-weight: bold;" id="final-wrong">0</div>
+                        <div>
+                            <div style="font-size: 2rem; color: #ff6b6b; font-weight: bold;" class="result-stat" id="final-wrong">0</div>
                             <div>错题数</div>
                         </div>
                     </div>
                 </div>
-                <p style="text-align: center; font-size: 1.2rem; margin-top: 20px;" id="result-message" class="result-message">
+                <p style="text-align: center; font-size: 1.2rem; margin-top: 20px;" id="result-message">
                     恭喜你完成所有关卡！继续加油成为科学小达人！
                 </p>
             </div>
-            <div class="modal-footer">
+            <div class="modal-footer" style="justify-content: center;">
                 <button class="modal-btn btn-primary" id="restart-btn" style="margin-right: 10px;">
                     <i class="fas fa-redo"></i> 再玩一次
                 </button>
@@ -1076,66 +1063,69 @@
                 correctAnswer: "B",
                 explanation: "写字时，笔尖与纸张之间的摩擦力使墨水能够留在纸上形成字迹。没有摩擦力，笔尖会在纸上打滑。"
             },
+            
+            // 生物类题目
             {
-                question: "下列哪种现象是由于重力引起的？",
-                options: ["A. 苹果从树上落下", "B. 气球飞向天空", "C. 船漂浮在水面上", "D. 磁铁吸引铁钉"],
-                correctAnswer: "A",
-                explanation: "苹果从树上落下是因为地球对苹果有吸引力，这种力就是重力。重力是地球吸引物体向地心的力。"
+                question: "植物进行光合作用的主要部位是？",
+                options: ["A. 根", "B. 茎", "C. 叶", "D. 花"],
+                correctAnswer: "C",
+                explanation: "植物进行光合作用的主要部位是叶片，因为叶片中含有大量的叶绿体，能够捕获光能并转化为化学能。"
             },
             {
-                question: "下列哪种现象是热传导的例子？",
-                options: ["A. 太阳晒热地面", "B. 用火炉烧水", "C. 空调制冷", "D. 冰箱冷冻食物"],
+                question: "下列哪种动物属于哺乳动物？",
+                options: ["A. 企鹅", "B. 鲸鱼", "C. 鳄鱼", "D. 蝴蝶"],
                 correctAnswer: "B",
-                explanation: "用火炉烧水时，热量从火炉传递到水壶，再从水壶传递到水，这种热量的传递方式叫做热传导。"
+                explanation: "鲸鱼是哺乳动物，具有哺乳动物的特征：胎生、哺乳、用肺呼吸。虽然生活在水中，但鲸鱼不是鱼类。"
             },
             {
-                question: "下列哪种物体是光源？",
-                options: ["A. 月亮", "B. 镜子", "C. 太阳", "D. 书本"],
+                question: "人体消化食物和吸收营养的主要器官是？",
+                options: ["A. 口腔", "B. 胃", "C. 小肠", "D. 大肠"],
                 correctAnswer: "C",
-                explanation: "光源是指能够自己发光的物体。太阳能够自己发光，是光源；月亮和镜子只能反射光，不是光源。"
+                explanation: "小肠是人体消化食物和吸收营养的主要器官，其内壁有大量绒毛，增加了吸收面积。"
             },
             {
-                question: "下列哪种能量转换发生在太阳能电池中？",
-                options: ["A. 光能→电能", "B. 电能→光能", "C. 热能→电能", "D. 化学能→电能"],
-                correctAnswer: "A",
-                explanation: "太阳能电池将太阳的光能直接转换为电能，为各种设备提供电力。"
-            },
-            {
-                question: "下列哪种现象是蒸发？",
-                options: ["A. 水结冰", "B. 冰融化", "C. 水变成水蒸气", "D. 水蒸气变成水"],
-                correctAnswer: "C",
-                explanation: "蒸发是液态水变成气态水蒸气的过程，发生在水的表面，在任何温度下都可以发生。"
-            },
-            {
-                question: "下列哪种现象是凝结？",
-                options: ["A. 水结冰", "B. 冰融化", "C. 水变成水蒸气", "D. 水蒸气变成水"],
+                question: "下列哪项不是昆虫的特征？",
+                options: ["A. 身体分为头、胸、腹三部分", "B. 有三对足", "C. 有翅膀", "D. 有脊椎"],
                 correctAnswer: "D",
-                explanation: "凝结是气态水蒸气变成液态水的过程，当水蒸气遇冷时就会发生凝结。"
+                explanation: "昆虫属于无脊椎动物，没有脊椎。它们的身体分为头、胸、腹三部分，有三对足，大多数有两对翅膀。"
             },
             {
-                question: "下列哪种物质可以溶解在水中？",
-                options: ["A. 沙子", "B. 糖", "C. 油", "D. 面粉"],
+                question: "植物通过什么过程制造食物？",
+                options: ["A. 呼吸作用", "B. 光合作用", "C. 蒸腾作用", "D. 分解作用"],
                 correctAnswer: "B",
-                explanation: "糖可以溶解在水中，形成糖水；沙子、油和面粉不能溶解在水中，会沉淀或漂浮。"
+                explanation: "植物通过光合作用制造食物（葡萄糖），该过程需要阳光、二氧化碳和水，产生氧气作为副产品。"
             },
             {
-                question: "下列哪种方法可以加快溶解速度？",
-                options: ["A. 降低温度", "B. 减少搅拌", "C. 增大溶质颗粒", "D. 加热"],
-                correctAnswer: "D",
-                explanation: "加热、搅拌和减小溶质颗粒都可以加快溶解速度。降低温度会减慢溶解速度。"
+                question: "下列哪种感觉器官负责嗅觉？",
+                options: ["A. 眼睛", "B. 鼻子", "C. 耳朵", "D. 皮肤"],
+                correctAnswer: "B",
+                explanation: "鼻子是负责嗅觉的感觉器官，能够感知空气中的气味分子。"
             },
             {
-                question: "下列哪种物质是酸性的？",
-                options: ["A. 柠檬汁", "B. 肥皂水", "C. 小苏打水", "D. 纯净水"],
-                correctAnswer: "A",
-                explanation: "柠檬汁是酸性的，pH值小于7；肥皂水和小苏打水是碱性的，pH值大于7；纯净水是中性的，pH值等于7。"
-            },
-            {
-                question: "下列哪种物质是碱性的？",
-                options: ["A. 醋", "B. 柠檬汁", "C. 肥皂水", "D. 橙汁"],
+                question: "下列哪项不是鸟类的主要特征？",
+                options: ["A. 有羽毛", "B. 卵生", "C. 有牙齿", "D. 前肢变为翅膀"],
                 correctAnswer: "C",
-                explanation: "肥皂水是碱性的，pH值大于7；醋、柠檬汁和橙汁是酸性的，pH值小于7。"
+                explanation: "鸟类没有牙齿，它们用喙啄食食物。鸟类的主要特征包括：有羽毛、卵生、前肢变为翅膀、恒温等。"
             },
+            {
+                question: "下列哪种植物属于裸子植物？",
+                options: ["A. 苹果树", "B. 松树", "C. 水稻", "D. 玫瑰"],
+                correctAnswer: "B",
+                explanation: "松树属于裸子植物，其种子裸露在球果的鳞片上，没有果实包裹。而被子植物的种子则包在果实内。"
+            },
+            {
+                question: "人体最大的器官是什么？",
+                options: ["A. 肝脏", "B. 心脏", "C. 肺", "D. 皮肤"],
+                correctAnswer: "D",
+                explanation: "皮肤是人体最大的器官，具有保护、感觉、调节体温等多种功能。"
+            },
+            {
+                question: "下列哪项是细胞的主要功能？",
+                options: ["A. 呼吸作用", "B. 繁殖", "C. 营养摄取", "D. 以上都是"],
+                correctAnswer: "D",
+                explanation: "细胞是生物体的基本结构和功能单位，具有呼吸作用、繁殖、营养摄取等多种功能。"
+            },
+            
             // 更多题目...
         ];
 
@@ -1194,7 +1184,7 @@
 
         // 初始化游戏
         function initGame() {
-            // 随机抽取10道题 - 确保每次都是全新的随机题目
+            // 从题库中随机抽取10道题
             currentQuestions = getRandomQuestions(10);
             
             currentQuestion = 0;
@@ -1220,8 +1210,19 @@
 
         // 获取随机题目
         function getRandomQuestions(count) {
-            const shuffled = [...scienceQuestions].sort(() => 0.5 - Math.random());
-            return shuffled.slice(0, count);
+            // 创建题库的副本
+            const allQuestions = [...scienceQuestions];
+            const selectedQuestions = [];
+            
+            // 随机选择题目
+            for (let i = 0; i < count; i++) {
+                if (allQuestions.length === 0) break;
+                const randomIndex = Math.floor(Math.random() * allQuestions.length);
+                selectedQuestions.push(allQuestions[randomIndex]);
+                allQuestions.splice(randomIndex, 1);
+            }
+            
+            return selectedQuestions;
         }
 
         // 开始游戏
@@ -1319,9 +1320,9 @@
             } else {
                 winSound.play();
                 // 显示闯关完成弹窗
-                finalScore.textContent = score;
-                finalCorrect.textContent = correctCount;
-                finalWrong.textContent = wrongCount;
+                finalScore.textContent = "0";
+                finalCorrect.textContent = "0";
+                finalWrong.textContent = "0";
                 
                 // 根据成绩设置不同消息
                 const message = score >= 80 ? 
@@ -1335,28 +1336,45 @@
                 resultModal.style.display = 'flex';
                 
                 // 添加动画效果
-                document.querySelector('.modal-content').style.animation = 'bounceIn 0.6s ease-out';
-                
-                // 为每个分数项添加动画
-                const scoreItems = document.querySelectorAll('.final-score-item');
-                scoreItems.forEach((item, index) => {
-                    item.style.animation = `floatUp 0.5s ${0.3 + index * 0.1}s forwards`;
-                });
-                
-                // 为消息添加动画
-                document.getElementById('result-message').style.animation = `floatUp 0.5s 0.6s forwards`;
-                
-                // 为按钮添加动画
-                document.querySelector('.modal-footer').style.animation = `floatUp 0.5s 0.8s forwards`;
-                
-                // 为奖牌添加动画
-                document.querySelector('.fa-medal').style.animation = 'pulse 1s 0.5s infinite alternate';
+                setTimeout(() => {
+                    // 旋转奖牌
+                    const medalIcon = document.querySelector('.result-medal');
+                    medalIcon.style.animation = 'rotate 1.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+                    
+                    // 数字动画
+                    animateValue("final-score", 0, score, 1000);
+                    animateValue("final-correct", 0, correctCount, 1000);
+                    animateValue("final-wrong", 0, wrongCount, 1000);
+                    
+                    // 显示统计数字
+                    document.querySelectorAll('.result-stat').forEach((el, index) => {
+                        setTimeout(() => {
+                            el.style.animation = 'countUp 0.8s forwards';
+                        }, 300 * index);
+                    });
+                }, 50);
                 
                 // 显示再玩一次按钮
                 restartInlineBtn.style.display = 'flex';
                 nextBtn.style.display = 'none';
             }
         });
+
+        // 数字动画效果
+        function animateValue(id, start, end, duration) {
+            const obj = document.getElementById(id);
+            let startTimestamp = null;
+            const step = (timestamp) => {
+                if (!startTimestamp) startTimestamp = timestamp;
+                const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                const value = Math.floor(progress * (end - start) + start);
+                obj.textContent = value;
+                if (progress < 1) {
+                    window.requestAnimationFrame(step);
+                }
+            };
+            window.requestAnimationFrame(step);
+        }
 
         // 关闭知识点弹窗
         closeExplanation.addEventListener('click', () => {
